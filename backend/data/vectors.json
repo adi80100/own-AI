@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "values": [
+      0.9,
+      0.4,
+      0.3
+    ],
+    "metadata": {
+      "text": "Advanced JavaScript",
+      "category": "Programming"
+    }
+  },
+  {
+    "id": 2,
+    "values": [
+      0.3,
+      0.6,
+      0.9
+    ],
+    "metadata": {
+      "text": "Java backend development",
+      "category": "Programming"
+    }
+  },
+  {
+    "id": 3,
+    "values": [
+      0.9,
+      0.1,
+      0.2
+    ],
+    "metadata": {
+      "text": "Python machine learning",
+      "category": "AI"
+    }
+  },
+  {
+    "id": 4,
+    "values": [
+      0.4,
+      0.7,
+      0.8
+    ],
+    "metadata": {
+      "text": "Node.js backend development",
+      "category": "Programming"
+    }
+  }
+]
