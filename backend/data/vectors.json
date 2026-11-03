@@ -1,29 +1,5 @@
 [
   {
-    "id": 1,
-    "values": [
-      0.9,
-      0.4,
-      0.3
-    ],
-    "metadata": {
-      "text": "Advanced JavaScript",
-      "category": "Programming"
-    }
-  },
-  {
-    "id": 2,
-    "values": [
-      0.3,
-      0.6,
-      0.9
-    ],
-    "metadata": {
-      "text": "Java backend development",
-      "category": "Programming"
-    }
-  },
-  {
     "id": 3,
     "values": [
       0.9,

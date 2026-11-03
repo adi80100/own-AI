@@ -232,3 +232,91 @@ export const updateVector = (req, res) => {
         });
     }
 };
+
+
+export const getPaginatedVectors = (req, res) => {
+    try {
+        const {
+            page = 1,
+            limit = 10,
+            category
+        } = req.query;
+
+        const result = db.getPaginated({
+            page: Number(page),
+            limit: Number(limit),
+            category
+        });
+
+        return res.status(200).json({
+            success: true,
+            ...result
+        });
+
+    } catch (error) {
+        return res.status(400).json({
+            success: false,
+            message: error.message
+        });
+    }
+};
+
+export const searchMetadata = (req, res) => {
+    try {
+        const { text, category } = req.query;
+
+        if (!text && !category) {
+            return res.status(400).json({
+                success: false,
+                message: "Provide text or category to search"
+            });
+        }
+
+        const results = db.searchByMetadata({
+            text,
+            category
+        });
+
+        return res.status(200).json({
+            success: true,
+            count: results.length,
+            data: results
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+};
+
+export const benchmarkVectors = (req, res) => {
+    try {
+        const { queryVector, k = 3 } = req.body;
+
+        if (!Array.isArray(queryVector)) {
+            return res.status(400).json({
+                success: false,
+                message: "Query vector is required"
+            });
+        }
+
+        const results = db.benchmark(
+            queryVector,
+            Number(k)
+        );
+
+        return res.status(200).json({
+            success: true,
+            message: "Benchmark completed successfully",
+            algorithms: results
+        });
+
+    } catch (error) {
+        return res.status(400).json({
+            success: false,
+            message: error.message
+        });
+    }
+};

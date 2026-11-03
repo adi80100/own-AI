@@ -314,6 +314,125 @@ class VectorDB {
 
     return updatedVector;
   }
+
+  getPaginated(options = {}) {
+    const {
+        page = 1,
+        limit = 10,
+        category
+    } = options;
+
+    // Validate pagination
+    if (!Number.isInteger(page) || page < 1) {
+        throw new Error("Page must be a positive integer");
+    }
+
+    if (!Number.isInteger(limit) || limit < 1) {
+        throw new Error("Limit must be a positive integer");
+    }
+
+    // Apply category filtering
+    let filteredVectors = this.vectors;
+
+    if (category) {
+        filteredVectors = filteredVectors.filter(
+            (vector) =>
+                vector.metadata?.category?.toLowerCase() ===
+                category.toLowerCase()
+        );
+    }
+
+    // Calculate pagination
+    const total = filteredVectors.length;
+    const startIndex = (page - 1) * limit;
+
+    const data = filteredVectors.slice(
+        startIndex,
+        startIndex + limit
+    );
+
+    return {
+        data,
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit)
+    };
+}
+
+searchByMetadata(filters = {}) {
+    const { text, category } = filters;
+
+    let results = this.vectors;
+
+    // Filter by text
+    if (text) {
+        results = results.filter((vector) =>
+            vector.metadata?.text
+                ?.toLowerCase()
+                .includes(text.toLowerCase())
+        );
+    }
+
+    // Filter by category
+    if (category) {
+        results = results.filter((vector) =>
+            vector.metadata?.category
+                ?.toLowerCase() === category.toLowerCase()
+        );
+    }
+
+    return results;
+}
+
+benchmark(queryVector, k = 3) {
+    if (this.vectors.length === 0) {
+        throw new Error("Database is empty");
+    }
+
+    validateVector(queryVector);
+
+    if (queryVector.length !== this.dimensions) {
+        throw new Error("Vector dimensions must match");
+    }
+
+    if (!Number.isInteger(k) || k < 1) {
+        throw new Error("k must be a positive integer");
+    }
+
+    const algorithms = [
+        "bruteForce",
+        "kdTree",
+        "hnsw"
+    ];
+
+    // Build indexes before measuring search time
+    for (const algorithm of algorithms) {
+        this.buildIndex(algorithm);
+    }
+
+    const results = {};
+
+    for (const algorithm of algorithms) {
+        const startTime = performance.now();
+
+        const searchResults = this.search(
+            queryVector,
+            { algorithm, k }
+        );
+
+        const endTime = performance.now();
+
+        results[algorithm] = {
+            executionTimeMs: Number(
+                (endTime - startTime).toFixed(4)
+            ),
+            results: searchResults
+        };
+    }
+
+    return results;
+}
 }
 
 export default VectorDB;
