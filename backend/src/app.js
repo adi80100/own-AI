@@ -1,6 +1,7 @@
 import express from "express"
 import cors from "cors"
 import vectorRoutes from "./routes/vectorRoutes.js"
+import knowledgeRoutes from "./routes/knowledgeRoutes.js";
 
 const app = express()
 app.use(cors({
@@ -18,6 +19,6 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/vectors", vectorRoutes);
-
+app.use("/api/knowledge", knowledgeRoutes);
 
 export default app

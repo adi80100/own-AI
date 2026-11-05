@@ -4,6 +4,7 @@ import {
   Search,
   ChartNoAxesColumn,
   Brain,
+  Compass
 } from "lucide-react";
 
 import { NavLink } from "react-router-dom";
@@ -30,6 +31,12 @@ const Sidebar = () => {
       path: "/benchmark",
       icon: ChartNoAxesColumn,
     },
+    {
+      name:"Explore",
+      path:"/explore",
+      icon:Compass
+
+    }
   ];
 
   return (
@@ -57,6 +64,7 @@ const Sidebar = () => {
               <Icon size={19} />
               <span>{item.name}</span>
             </NavLink>
+            
           );
         })}
       </nav>

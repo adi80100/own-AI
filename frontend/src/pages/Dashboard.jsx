@@ -1,3 +1,4 @@
+
 import {
   Database,
   Layers,
@@ -7,12 +8,24 @@ import {
 
 import StatCard from "../components/StatCard";
 import { useVectors } from "../context/VectorContext.jsx";
+import VectorCharts from "../components/VectorCharts.jsx";
 
 const Dashboard = () => {
-        const { vectors, loading, error } = useVectors();
+  const { vectors, loading, error } = useVectors();
+
+  const dimensions =
+    vectors.length > 0 ? vectors[0].values.length : 0;
+
+  const categories = new Set(
+    vectors.map(
+      (vector) => vector.metadata?.category || "Uncategorized"
+    )
+  ).size;
 
   return (
     <div className="dashboard">
+
+      {/* Dashboard Heading */}
       <div className="page-heading">
         <div>
           <h1>Dashboard</h1>
@@ -20,31 +33,38 @@ const Dashboard = () => {
         </div>
       </div>
 
+      {/* Statistics Cards */}
       <div className="stats-grid">
+
         <StatCard
           title="Total Vectors"
-           value={loading ? "..." : vectors.length}
+          value={loading ? "..." : vectors.length}
           icon={Database}
         />
 
         <StatCard
-          title="Algorithms"
-          value="3"
+          title="Dimensions"
+          value={loading ? "..." : dimensions}
           icon={Layers}
         />
 
         <StatCard
-          title="Searches"
-          value="0"
+          title="Categories"
+          value={loading ? "..." : categories}
           icon={Search}
         />
 
         <StatCard
           title="Database Status"
-            value={loading ? "Loading" : error ? "Offline" : "Active"}
+          value={loading ? "Loading" : error ? "Offline" : "Active"}
           icon={Zap}
         />
+
       </div>
+
+      {/* Vector Analytics */}
+      {!loading && !error && <VectorCharts />}
+
     </div>
   );
 };
